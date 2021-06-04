@@ -11,14 +11,14 @@ import java.time.ZonedDateTime;
 @Value
 public class Update {
     @NonNull
-    private String name;
+    String name;
 
     @NonNull
-    private String version;
+    String version;
 
     @NonNull
-    private ZonedDateTime processed;
+    ZonedDateTime processed;
 
     @NonNull
-    private String data;
+    String data;
 }
