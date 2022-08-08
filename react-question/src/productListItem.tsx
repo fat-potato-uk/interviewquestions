@@ -1,15 +1,12 @@
-import React from 'react';
 import { IProduct } from './product';
 
 export interface IProductListItemProps {
   product: IProduct;
 }
 
-export default class ProductListItem extends React.Component<IProductListItemProps> {
-  public render(): React.ReactElement {
+export function ProductListItem(props: IProductListItemProps): JSX.Element {
     return <div>
-        <span>{this.props.product.name}. Only {this.props.product.numberOfAvailableItems} left.</span>
+        <span>{props.product.name}. Only {props.product.numberOfAvailableItems} left.</span>
         <button>Buy now!</ button>
     </div>
-  }  
 }

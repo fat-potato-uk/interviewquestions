@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { generateProduct } from './product';
 import { IProduct } from './product';
-import ProductList from './productList';
+import { ProductList } from './productList';
 
 const initialItems: IProduct[] = Array.from({length: 25 }, () => generateProduct());
 
