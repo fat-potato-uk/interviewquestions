@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { generateProduct, IProduct } from './product';
-import { ProductListItem } from './productListItem';
 
 interface IProductListProps {
     initialProducts: IProduct[];
+}
+
+interface IProductListItemProps {
+  product: IProduct;
 }
 
 export function ProductList(props: IProductListProps) {
@@ -16,4 +19,11 @@ export function ProductList(props: IProductListProps) {
     <button onClick={refreshProducts}>Refresh</button>
     { products.map((product) => <ProductListItem key={product.name} product={product} /> )}
   </div>
+}
+
+export function ProductListItem(props: IProductListItemProps): JSX.Element {
+    return <div>
+        <span>{props.product.name}. Only {props.product.numberOfAvailableItems} left.</span>
+        <button>Buy now!</ button>
+    </div>
 }
