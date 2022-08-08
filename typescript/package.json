@@ -1,15 +1,11 @@
 {
-  "name": "interview-questions",
+  "name": "typescript-interview-question",
   "version": "1.0.0",
   "description": "Typescript interview questions",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "node ./dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "typescript": "^4.7.4"
   }
