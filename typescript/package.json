@@ -1,0 +1,12 @@
+{
+  "name": "typescript-interview-question",
+  "version": "1.0.0",
+  "description": "Typescript interview questions",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
