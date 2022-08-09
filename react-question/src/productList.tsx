@@ -22,8 +22,12 @@ export function ProductList(props: IProductListProps) {
 }
 
 export function ProductListItem(props: IProductListItemProps): JSX.Element {
-    return <div>
-        <span>{props.product.name}. Only {props.product.numberOfAvailableItems} left.</span>
-        <button>Buy now!</ button>
-    </div>
+  const buyProduct = () => {
+    // API call to buy product
+  };
+
+  return <div>
+      <span>{props.product.name}. Only {props.product.numberOfAvailableItems} left.</span>
+      <button onClick={buyProduct}>Buy now!</ button>
+  </div>
 }
