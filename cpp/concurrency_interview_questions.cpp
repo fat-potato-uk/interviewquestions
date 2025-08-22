@@ -36,10 +36,9 @@ void ConcurrencyInterviewQuestions::processUpdate(const Update & update)
     // If there is no scheduled task for the future, create one, otherwise finish
     if (!currently_updating_) {
         currently_updating_ = true;
-        executor_.get().executeFunctionInAnotherThread([&]() {
-            std::this_thread::sleep_for(std::chrono::seconds(5));
+        executor_.get().schedule([&]() {
             doUpdate();
-        });
+        }, std::chrono::seconds(5));
     }
 
     mutex_.unlock();
