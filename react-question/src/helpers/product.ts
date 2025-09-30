@@ -11,3 +11,8 @@ export function generateProduct(): Product {
         numberOfAvailableItems: Math.floor(Math.random() * 3) + 1
     };
 }
+
+export const buyProduct = (product: Product) => {
+    // Mock API call
+    return null;
+};

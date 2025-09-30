@@ -1,4 +1,4 @@
-import { Product } from '../helpers/product';
+import { buyProduct, Product } from '../helpers/product';
 
 type Props = {
     product: Product;
@@ -11,17 +11,13 @@ type Props = {
  * @returns {JSX.Element}
  */
 const ProductListItem = ({ product }: Props) => {
-    const buyProduct = () => {
-        // Mock API call to buy product...
-    };
-
     return (
         <div className="product-item">
             <b>{product.name}</b>
 
             <div className="product-item-buy">
                 <p>Only {product.numberOfAvailableItems} left!</p>
-                <button onClick={buyProduct}>Buy now!</button>
+                <button onClick={() => buyProduct(product)}>Buy now!</button>
             </div>
         </div>
     );
