@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- * A component thst displays a list of products.
+ * A component that displays a list of products.
  *
  * @param {Product[]} props.initialItems The initial list of products to display
  * @returns {JSX.Element}
@@ -16,7 +16,8 @@ export function ProductList({ initialProducts }: Props) {
     const [products, setProducts] = useState<Product[]>(initialProducts);
 
     const addProduct = () => {
-        setProducts([...products, generateProduct()]);
+        const newProduct = generateProduct();
+        setProducts([...products, newProduct]);
     };
 
     return (
