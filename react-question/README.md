@@ -1,0 +1,1 @@
+For the purpose of the interview you only need to concern yourself with what is in the src/ and tests/ directory.
