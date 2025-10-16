@@ -1,0 +1,28 @@
+body {
+    padding: 0 16px;
+    font-family: 'Open Sans', Helvetica, Arial, Lucida, sans-serif;
+    background-color: #fafafa;
+}
+
+.product-list {
+    width: fit-content;
+}
+
+.product-item {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    margin: 8px 0;
+    border: 1px solid #eee;
+}
+
+.product-item-buy {
+    display: flex;
+    gap: 16px;
+}
+
+.product-item-buy > button {
+    margin: auto 0;
+    height: fit-content;
+}
