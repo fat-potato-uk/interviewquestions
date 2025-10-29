@@ -28,9 +28,12 @@ describe('UnitTestingInterviewQuestions', () => {
 
             generateHotnessRatingSpy.mockResolvedValue(80);
             expect(await unitTestingInterviewQuestions.isItTooHot(10, 10, Animal.LION)).toBe(true);
+            expect(generateHotnessRatingSpy).toHaveBeenCalledWith(10, 10);
+
 
             generateHotnessRatingSpy.mockResolvedValue(50);
-            expect(await unitTestingInterviewQuestions.isItTooHot(10, 10, Animal.LION)).toBe(false);
+            expect(await unitTestingInterviewQuestions.isItTooHot(22, 22, Animal.LION)).toBe(false);
+            expect(generateHotnessRatingSpy).toHaveBeenCalledWith(22, 22);
         });
     });
 
