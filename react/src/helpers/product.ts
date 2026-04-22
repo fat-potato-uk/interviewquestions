@@ -5,7 +5,7 @@ export type Product = {
     numberOfAvailableItems: number;
 };
 
-export function generateProduct(): Product {
+export const generateProduct = (): Product => {
     return {
         name: faker.commerce.product(),
         numberOfAvailableItems: Math.floor(Math.random() * 3) + 1

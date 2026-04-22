@@ -2,14 +2,14 @@ import '@testing-library/jest-dom';
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { beforeEach } from 'node:test';
-import ProductListItem from '../src/components/ProductListItem';
-import * as Helpers from '../src/helpers/product';
-import { generateProduct } from '../src/helpers/product';
+import * as Helpers from '../../helpers/product';
+import { generateProduct } from '../../helpers/product';
+import ProductListItem from '../ProductListItem';
 
-vi.mock('../src/helpers/product');
+vi.mock('../../helpers/product');
+
 const mockGenerateProduct = vi.mocked(generateProduct);
 
 const MOCK_PRODUCT = {
