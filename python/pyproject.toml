@@ -14,7 +14,7 @@ dependencies = [
 
 [project.scripts]
 interview-questions = "python_interview_questions:main"
-acquire-compute = "python_interview_questions.scripts.acquire_compute:main"
+acquire-compute = "python_interview_questions.question_two.acquire_compute:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -44,4 +44,5 @@ dependencies = ["black>=24.3.0", "isort>=5.13.0"]
 dev = [
     "black>=26.5.1",
     "isort>=8.0.1",
+    "pytest>=9.0.3",
 ]
