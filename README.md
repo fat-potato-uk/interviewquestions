@@ -23,3 +23,8 @@ Note: You will be looking at the React App code and the concurrency code inside 
 
 - UI and unit testing - [React](./react/src/index.tsx)
 - Concurrency question - [Typescript](./typescript/src/concurrencyInterviewQuestion/concurrenyInterviewQuestions.ts)
+
+## Python
+
+- Scripting - [Python](./python/src/python_interview_questions/scripts/acquire_compute.py)
+- Advanced Python Application [Python](./python)
