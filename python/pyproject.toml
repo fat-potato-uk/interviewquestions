@@ -1,0 +1,47 @@
+[project]
+name = "python-interview-questions"
+version = "0.1.0"
+description = "Fat Potato Python interview questions."
+authors = [
+    { name = "Fat Potato Ltd", email = "info@fat-potato.co.uk" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.136.3",
+    "httpx>=0.28.1",
+    "uvicorn>=0.49.0",
+]
+
+[project.scripts]
+interview-questions = "python_interview_questions:main"
+acquire-compute = "python_interview_questions.scripts.acquire_compute:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.3.0",
+    "isort>=5.13.0",
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py314"]
+include = ["src/python_interview_questions"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["python_interview_questions"]
+default_section = "THIRDPARTY"
+
+[tool.hatch.envs.dev]
+dependencies = ["black>=24.3.0", "isort>=5.13.0"]
+
+[dependency-groups]
+dev = [
+    "black>=26.5.1",
+    "isort>=8.0.1",
+]
