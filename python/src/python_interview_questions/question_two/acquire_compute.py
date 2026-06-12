@@ -68,7 +68,6 @@ def main():
         "-c",
         "--config",
         type=Path,
-        default="./example-config.ini",
         nargs="?",
         help="An optional path to the config file to use",
     )
