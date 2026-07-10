@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from python_interview_questions.question_two.acquire_compute import (
+from python_interview_questions.user_tools.acquire_compute import (
     Config,
     make_request,
     validate_args,
@@ -30,7 +30,7 @@ class TestValidateArgs:
 
 
 class TestMakeRequest:
-    @patch("python_interview_questions.question_two.acquire_compute.httpx")
+    @patch("python_interview_questions.user_tools.acquire_compute.httpx")
     def test_requests_compute_endpoint_with_amount(self, mock_httpx):
         config = Config(max_compute_amount=10, base_url="http://localhost:8000")
         mock_client = mock_httpx.Client.return_value
@@ -45,7 +45,7 @@ class TestMakeRequest:
             params={"amount": 7},
         )
 
-    @patch("python_interview_questions.question_two.acquire_compute.httpx")
+    @patch("python_interview_questions.user_tools.acquire_compute.httpx")
     def test_raises_for_status_on_the_response(self, mock_httpx):
         config = Config(max_compute_amount=10, base_url="http://localhost:8000")
         mock_client = mock_httpx.Client.return_value
@@ -62,7 +62,7 @@ class TestMakeRequest:
             ("https://compute.example.com", "https://compute.example.com/api/v1/compute"),
         ],
     )
-    @patch("python_interview_questions.question_two.acquire_compute.httpx")
+    @patch("python_interview_questions.user_tools.acquire_compute.httpx")
     def test_builds_endpoint_from_config_base_url(
         self, mock_httpx, base_url, expected_endpoint
     ):
