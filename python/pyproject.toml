@@ -14,7 +14,7 @@ dependencies = [
 
 [project.scripts]
 interview-questions = "python_interview_questions:main"
-acquire-compute = "python_interview_questions.question_two.acquire_compute:main"
+acquire-compute = "python_interview_questions.user_tools.acquire_compute:main"
 
 [build-system]
 requires = ["hatchling"]

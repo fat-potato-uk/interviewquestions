@@ -26,5 +26,5 @@ Note: You will be looking at the React App code and the concurrency code inside 
 
 ## Python
 
-- Scripting - [Python](./python/src/python_interview_questions/scripts/acquire_compute.py)
+- Scripting - [Python](./python/src/python_interview_questions/user_tools/acquire_compute.py)
 - Advanced Python Application [Python](./python)
