@@ -11,20 +11,15 @@ from python_interview_questions.user_tools.acquire_compute import (
 
 
 class TestValidateArgs:
-    def test_passes_when_no_config_and_amount_supplied(self):
-        args = Namespace(config=None, interactive=False, amount=5)
-
-        assert validate_args(args) is None
-
-    def test_passes_in_interactive_mode_without_amount(self):
-        args = Namespace(config=None, interactive=True, amount=None)
+    def test_passes_when_no_config_supplied(self):
+        args = Namespace(config=None, amount=5)
 
         assert validate_args(args) is None
 
     def test_passes_when_config_path_exists(self, tmp_path):
         config_file = tmp_path / "config.ini"
         config_file.write_text("[constraints]\nmax-compute-request = 5\n")
-        args = Namespace(config=config_file, interactive=True, amount=None)
+        args = Namespace(config=config_file, amount=5)
 
         assert validate_args(args) is None
 
