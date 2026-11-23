@@ -5,6 +5,9 @@ from pathlib import Path
 
 import httpx
 
+DEFAULT_BASE_URL = "https://compute.prod.example.com"
+DEFAULT_MAX_COMPUTE_AMOUNT = 10
+
 
 @dataclass(frozen=True)
 class Config:
@@ -13,73 +16,43 @@ class Config:
 
 
 def make_request(compute_amount: int, config: Config) -> None:
-    client = httpx.Client(headers={"Content-Type": "application/json"})
     endpoint = f"{config.base_url}/api/v1/compute"
-    response = client.get(endpoint, params={"amount": compute_amount})
+    response = httpx.post(endpoint, params={"amount": compute_amount})
     response.raise_for_status()
 
 
-def validate_args(args):
+def validate_args(args: argparse.Namespace) -> None:
     """Further validates the arguments past the context for which `argparse` can be responsible"""
-    if args.config:
-        assert isinstance(args.config, Path)  # Assert the type for valid type-hinting
-        if not args.config.exists():
-            raise RuntimeError("Config path does not exist")
-
-    if args.interactive == False and args.amount is None:
-        raise RuntimeError(
-            "If the script is not in interactive mode, --amount must be supplied on the command line"
-        )
+    if args.config is not None and not args.config.exists():
+        raise RuntimeError("Config path does not exist")
 
 
-def parse_config(config_file: Path | None):
+def parse_config(config_file: Path | None) -> Config:
     """Parse the configuration file if one is provided, else return defaults"""
-    if config_file is None:
-        return Config(max_compute_amount=10, base_url="")
-
     parser = configparser.ConfigParser()
-    parser.read(config_file)
+    if config_file is not None:
+        parser.read(config_file)
 
-    # Parse the constraints in the config file
-    constraints = parser["constraints"]
-    max_compute_amount: int = int(constraints.get("max-compute-request", 10))
-
-    # Parse the service options in the config file
-    service = parser["service"]
-    base_url = service.get("base_url", "")
+    max_compute_amount = parser.getint(
+        "constraints", "max-compute-request", fallback=DEFAULT_MAX_COMPUTE_AMOUNT
+    )
+    base_url = parser.get("service", "base_url", fallback=DEFAULT_BASE_URL)
     return Config(max_compute_amount=max_compute_amount, base_url=base_url)
 
 
-def interactive() -> int:
-    """Interactively ask the user for the number of compute resources they require"""
-    user_input = input("Compute amount required: ")
-    try:
-        return int(user_input)
-    except ValueError:
-        raise RuntimeError(f"[{user_input}] is not a valid integer")
-
-
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
-        description="CLI for interacting with the compute management service",
-        color=True,
+        description="CLI for interacting with the compute management service"
     )
     parser.add_argument(
-        "-c",
-        "--config",
-        type=Path,
-        nargs="?",
-        help="An optional path to the config file to use",
+        "-c", "--config", type=Path, help="An optional path to the config file to use"
     )
     parser.add_argument(
-        "-i",
-        "--interactive",
-        default=False,
-        action="store_true",
-        help="Use interactive mode when the script is run",
-    )
-    parser.add_argument(
-        "-a", "--amount", type=int, nargs="?", help="The amount of compute to request"
+        "-a",
+        "--amount",
+        type=int,
+        required=True,
+        help="The amount of compute to request",
     )
 
     args = parser.parse_args()
@@ -87,13 +60,12 @@ def main():
     try:
         validate_args(args)
         config = parse_config(args.config)
-        compute_amount = interactive() if args.interactive else args.amount
-        if compute_amount > config.max_compute_amount:
+        if args.amount > config.max_compute_amount:
             raise RuntimeError(
-                f"Cannot request [{compute_amount}] resource, amount too high!"
+                f"Cannot request [{args.amount}] resource, amount too high!"
             )
-        make_request(compute_amount, config)
-        print(f"Successfully requested [{compute_amount}] resources!")
+        make_request(args.amount, config)
+        print(f"Successfully requested [{args.amount}] resources!")
 
     except Exception as exc:
         print(f"Script exiting: {exc}")
