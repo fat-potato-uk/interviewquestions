@@ -1,80 +1,61 @@
 import asyncio
-import logging
-from typing import Annotated
 
 import uvicorn
-from fastapi import Depends, FastAPI, Request
+from fastapi import FastAPI
 
 from python_interview_questions.service_client import Client, ComputeResource
 
 
-# Create a FastAPI 'dependency' to facilitate dependency injection of
-# our service client in to FastAPI endpoints
-def get_api_client(request: Request) -> Client:
-    return request.app.state.client
-
-
-def get_current_resource_list(request: Request) -> list[ComputeResource]:
-    return request.app.state.acquired_resources
-
-
-# Type hint for easy of use in method signatures
-ApiClient = Annotated[Client, Depends(get_api_client)]
-ResourceList = Annotated[list[ComputeResource], Depends(get_current_resource_list)]
-
-
-def create_app(client: Client, resource_list: list[ComputeResource]) -> FastAPI:
-    """Create a FastAPI application instance. Registers the client and resource list
-    on the FastAPI context"""
+def create_app(client: Client, resources: list[ComputeResource]) -> FastAPI:
+    """Create a FastAPI application that brokers compute requests to the 3rd
+    party and keeps a record of the acquired resources"""
     app = FastAPI()
-    app.state.acquired_resources = resource_list
-    app.state.client = client
+
+    @app.post("/api/v1/compute")
+    async def acquire_compute(amount: int) -> list[ComputeResource]:
+        """Acquire compute resources from the 3rd party"""
+        new_resources = await client.request_compute_resource(amount)
+        resources.extend(new_resources)
+        return new_resources
 
     @app.get("/api/v1/compute")
-    async def acquire_compute(
-        amount: int, client: ApiClient, resource_list: ResourceList
-    ) -> None:
-        """Endpoint that calls a 3rd party API to acquire compute resources."""
-        try:
-            new_resources = await client.request_compute_resource(amount)
-            resource_list.extend(new_resources)
-        except Exception as exc:
-            print(f"Unable to acquire more compute: {exc}")
+    async def list_compute() -> list[ComputeResource]:
+        """List the compute resources acquired by this application instance"""
+        return resources
 
     return app
 
 
-async def log_acquired_resources(current_resources: list[ComputeResource]) -> None:
-    """Log out the resources that have been acquired by this application instance"""
+async def log_acquired_resources(new_resources: list[ComputeResource]) -> None:
+    """Every 5 seconds, log the resources acquired since the last report"""
     while True:
         await asyncio.sleep(5.0)
 
-        if len(current_resources) == 0:
+        if not new_resources:
             continue
 
-        # Convert list to just the names
-        current_resources = [resource.name for resource in current_resources]
-        print("=== Currently Acquired Resources ===")
-        for resource in current_resources:
-            print(resource)
+        print("=== Newly Acquired Resources ===")
+        for resource in new_resources:
+            print(resource.name)
+
+        # Start the next report from empty
+        new_resources.clear()
 
 
-async def run():
-
+async def run() -> None:
     client = Client()
-    acquired_resource_list = []
-    app = create_app(client, acquired_resource_list)
+    acquired_resources: list[ComputeResource] = []
+    app = create_app(client, acquired_resources)
 
-    config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="warning")
+    config = uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="warning")
     server = uvicorn.Server(config)
 
     async with asyncio.TaskGroup() as tg:
         tg.create_task(server.serve())
-        tg.create_task(log_acquired_resources(acquired_resource_list))
+        tg.create_task(log_acquired_resources(acquired_resources))
 
 
-def main():
-    logging.getLogger("httpx").setLevel(logging.WARNING)
+def main() -> None:
     try:
         asyncio.run(run())
     except KeyboardInterrupt:
